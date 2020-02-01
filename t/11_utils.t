@@ -9,7 +9,8 @@ use Test::More;
 use Git::Annex;
 use File::Spec::Functions qw(catfile);
 use t::Setup;
-use File::Slurp;
+use Storable;
+use Data::Compare;
 
 with_temp_annexes {
     my $temp  = shift;
@@ -20,7 +21,9 @@ with_temp_annexes {
     ok $annex->_unused_cache eq $unused_info,
       "_unused_cache resolves to correct path";
     $annex->{_unused} = { foo => "bar" };
-    write_file $unused_info, "baz\n";
+    $annex->_store_unused_cache;
+    ok Compare($annex->{_unused}, retrieve $unused_info),
+      "_store_unused_cache stores the cache";
     $annex->_clear_unused_cache;
     ok !exists $annex->{_unused}, "_clear_unused_cache clears unused hashref";
     ok !-f $unused_info, "_clear_unused_cache deletes the cache";

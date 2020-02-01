@@ -108,6 +108,12 @@ has _unused_cache => (
     is      => "lazy",
     default => sub { shift->_git_path(catfile(qw(annex unused_info))) });
 
+sub _store_unused_cache {
+    my $self = shift;
+    $self->{_unused}{timestamp} = time;
+    store $self->{_unused}, $self->_unused_cache;
+}
+
 sub _clear_unused_cache {
     my $self = shift;
     delete $self->{_unused};
