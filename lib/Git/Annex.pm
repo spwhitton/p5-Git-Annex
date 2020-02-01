@@ -78,7 +78,7 @@ Returns the toplevel of the repository.
 
 =cut
 
-has "toplevel", is => 'ro';
+has toplevel => (is => 'ro');
 
 =head2 git
 
@@ -86,7 +86,7 @@ Returns an instance of L<Git::Wrapper> initialised in the repository.
 
 =cut
 
-has "git" => (
+has git => (
     is      => 'lazy',
     default => sub { Git::Wrapper->new(shift->toplevel) });
 
@@ -96,7 +96,7 @@ Returns an instance of L<Git::Repository> initialised in the repository.
 
 =cut
 
-has "repo" => (
+has repo => (
     is => 'lazy',
     # we don't know (here) whether our repo is bare or not, so we
     # don't know whether to use the git_dir or work_tree arguments to
