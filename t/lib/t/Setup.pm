@@ -41,7 +41,7 @@ sub with_temp_annexes (&) {
         $source2->RUN(qw(-c annex.addunlocked=false annex add other));
         $source2->commit({ message => "add" });
 
-        &{ $_[0] }($temp);
+        &{ $_[0] }($temp, $source1, $source2, $dest);
     }
     rmtree $temp;
 }
