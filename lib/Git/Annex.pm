@@ -66,6 +66,7 @@ use Cwd;
 use File::chdir;
 use Git::Wrapper;
 use Git::Repository;
+use File::Spec::Functions qw(catfile rel2abs);
 
 use Moo;
 use namespace::clean;
@@ -102,6 +103,22 @@ has repo => (
     # don't know whether to use the git_dir or work_tree arguments to
     # Git::Repository::new, so we chdir and let call without arguments
     default => sub { local $CWD = shift->toplevel; Git::Repository->new });
+
+has _unused_cache => (
+    is      => "lazy",
+    default => sub { shift->_git_path(catfile(qw(annex unused_info))) });
+
+sub _clear_unused_cache {
+    my $self = shift;
+    delete $self->{_unused};
+    unlink $self->_unused_cache;
+}
+
+sub _git_path {
+    my ($self, $input) = @_;
+    my ($path) = $self->git->rev_parse({ git_path => 1 }, $input);
+    rel2abs($path, $self->toplevel);
+}
 
 around BUILDARGS => sub {
     my (undef, undef, @args) = @_;
