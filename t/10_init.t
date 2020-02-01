@@ -10,6 +10,7 @@ use Git::Annex;
 use File::chdir;
 use File::Temp qw(tempdir);
 use t::Setup;
+use File::Spec::Functions qw(catfile);
 
 {
     my $temp = tempdir CLEANUP => 1;
@@ -31,13 +32,13 @@ use t::Setup;
 
 # lazy init of Git::Repository object requires an actual git repo, not
 # just an empty tempdir
-with_temp_annex {
-    my $temp = shift;
-    my $annex = Git::Annex->new($temp);
+with_temp_annexes {
+    my $annex = Git::Annex->new("source1");
     ok !defined $annex->{repo}, "Git::Repository instance lazily instantiated";
     ok $annex->repo->isa("Git::Repository") && defined $annex->{repo},
       "Git::Repository instance available";
-    ok $annex->repo->work_tree eq $temp, "Git::Repository has correct toplevel";
+    ok $annex->repo->work_tree eq catfile(shift, "source1"),
+      "Git::Repository has correct toplevel";
 };
 
 done_testing;
