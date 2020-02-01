@@ -106,7 +106,7 @@ has repo => (
 
 has _unused_cache => (
     is      => "lazy",
-    default => sub { shift->_git_path(catfile(qw(annex unused_info))) });
+    default => sub { shift->_git_path(qw(annex unused_info)) });
 
 sub _store_unused_cache {
     my $self = shift;
@@ -121,8 +121,8 @@ sub _clear_unused_cache {
 }
 
 sub _git_path {
-    my ($self, $input) = @_;
-    my ($path) = $self->git->rev_parse({ git_path => 1 }, $input);
+    my ($self, @input) = @_;
+    my ($path) = $self->git->rev_parse({ git_path => 1 }, catfile @input);
     rel2abs($path, $self->toplevel);
 }
 
