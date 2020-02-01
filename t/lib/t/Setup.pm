@@ -3,8 +3,8 @@ package t::Setup;
 use 5.028;
 use strict;
 use warnings;
+use parent 'Exporter';
 
-use Exporter 'import';
 use File::Slurp;
 use File::Temp qw(tempdir);
 use Git::Wrapper;
