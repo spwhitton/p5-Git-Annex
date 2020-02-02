@@ -250,6 +250,19 @@ sub _clear_unused_cache {
     unlink $self->_unused_cache;
 }
 
+=head2 abs_contentlocation($key)
+
+Returns an absolute path to the content for git-annex key C<$key>.
+
+=cut
+
+sub abs_contentlocation {
+    my ($self, $key) = @_;
+    my $contentlocation;
+    try { ($contentlocation) = $self->git->annex("contentlocation", $key) };
+    $contentlocation ? rel2abs($contentlocation, $self->toplevel) : undef;
+}
+
 sub _git_path {
     my ($self, @input) = @_;
     my ($path) = $self->git->rev_parse({ git_path => 1 }, catfile @input);
