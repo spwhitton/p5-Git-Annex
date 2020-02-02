@@ -26,14 +26,14 @@ with_temp_annexes {
 
     $annex->git->config(qw(annex.used-refspec +refs/heads/*));
     my @unused = @{ $annex->unused };
-    ok $annex->{_unused}{unused_args}{used_refspec} eq "+refs/heads/*",
+    is $annex->{_unused}{unused_args}{used_refspec}, "+refs/heads/*",
       "uses configured annex.used-refspec";
     $annex->git->config(qw(--unset annex.used-refspec));
     @unused = @{ $annex->unused(used_refspec => "+refs/heads/*") };
-    ok $annex->{_unused}{unused_args}{used_refspec} eq "+refs/heads/*",
+    is $annex->{_unused}{unused_args}{used_refspec}, "+refs/heads/*",
       "uses passed used_refspec";
     @unused = @{ $annex->unused };
-    ok $annex->{_unused}{unused_args}{used_refspec} eq
+    is $annex->{_unused}{unused_args}{used_refspec},
       "+refs/heads/*:-refs/heads/synced/*",
       "uses default --used-refspec";
 

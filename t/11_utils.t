@@ -20,10 +20,10 @@ with_temp_annexes {
     my $annex = Git::Annex->new("source1");
 
     my $unused_info = catfile($temp, qw(source1 .git annex unused_info));
-    ok $annex->_git_path("blah", "foo")
-      eq catfile($temp, qw(source1 .git blah foo)),
+    is $annex->_git_path("blah", "foo"),
+      catfile($temp, qw(source1 .git blah foo)),
       "_git_path resolves a path";
-    ok $annex->_unused_cache eq $unused_info,
+    is $annex->_unused_cache, $unused_info,
       "_unused_cache resolves to correct path";
     $annex->{_unused} = { foo => "bar" };
     $annex->_store_unused_cache;
