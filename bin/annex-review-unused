@@ -94,7 +94,7 @@ UNUSED: while ($i < @unused_files) {
         say "  looks like stale tmp or bad file, with key "
           . $unused_file->{key};
     } else {
-        my @log_lines = @{ $unused_file->{log_lines} };
+        my @log_lines = map { s/^/  /r } @{ $unused_file->{log_lines} };
         unless ($just_print) {
             # truncate log output if necessary to ensure user's
             # terminal does not scroll
