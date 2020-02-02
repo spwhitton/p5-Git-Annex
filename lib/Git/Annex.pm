@@ -253,7 +253,7 @@ sub _clear_unused_cache {
 sub _git_path {
     my ($self, @input) = @_;
     my ($path) = $self->git->rev_parse({ git_path => 1 }, catfile @input);
-    rel2abs($path, $self->toplevel);
+    rel2abs $path, $self->toplevel;
 }
 
 around BUILDARGS => sub {
