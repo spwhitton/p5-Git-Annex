@@ -258,7 +258,7 @@ sub _git_path {
 
 around BUILDARGS => sub {
     my (undef, undef, @args) = @_;
-    { toplevel => $args[0] // getcwd };
+    { toplevel => $args[0] ? rel2abs($args[0]) : getcwd };
 };
 
 1;
