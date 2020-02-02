@@ -20,10 +20,6 @@
 
 Git::Annex - Perl interface to git-annex repositories
 
-=head1 VERSION
-
-version 0.01
-
 =head1 SYNOPSIS
 
   my $annex = Git::Annex->new("/home/spwhitton/annex");
