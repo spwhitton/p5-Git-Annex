@@ -50,7 +50,13 @@ GetOptions
   'just-print'     => \$just_print;
 if ($from_arg) {
     $unused_opts{from} = $dropunused_args{from} = $from_arg;
-    ($uuid) = $annex->git->config("remote." . $from_arg . ".annex-uuid");
+    #<<<
+    try {
+        ($uuid) = $annex->git->config("remote." . $from_arg . ".annex-uuid");
+    } catch {
+        die "couldn't determine an annex UUID for $from_arg remote";
+    };
+    #>>>
 }
 $unused_opts{used_refspec} = $used_refspec_arg if $used_refspec_arg;
 
