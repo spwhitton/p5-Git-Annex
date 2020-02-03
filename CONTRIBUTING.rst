@@ -22,7 +22,7 @@ Reporting bugs
 ==============
 
 Please use the CPAN bug tracker:
-https://rt.cpan.org/Public/Dist/Display.html?Name=Git-Annex
+<https://rt.cpan.org/Public/Dist/Display.html?Name=Git-Annex>
 
 Please read "How to Report Bugs Effectively" to ensure your bug report
 constitutes a useful contribution to the project:
