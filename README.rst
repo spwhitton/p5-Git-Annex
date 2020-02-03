@@ -3,9 +3,12 @@ Git::Annex
 
 Perl interface to git-annex repositories.
 
-Build
-=====
+Synopsis
+========
 
-::
+Install
+=======
 
-    dzil build
+From CPAN or your distribution's repositories, or if you want to build
+and install out of this git repository, you can use `dzil build` to
+produce an installable Perl distribution.
