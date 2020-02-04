@@ -46,11 +46,13 @@ with_temp_annexes {
       "it passes --batch to git-annex";
     my ($response1, $response2) = $batch->say("foo/foo2/baz", "foo/foo2/baz");
     is $response1, $response2, "it returns a list in list context";
-    is scalar $batch->say("foo/foo2/baz", "foo/foo2/baz"), 2,
-      "it returns a scalar in scalar context";
     my ($response3, $response4) = $batch->say("foo/foo2/baz", "foo/bar");
     is_deeply [$response3, $response4], ["foo/foo2/baz", ""],
       "it returns results in the correct order";
+    my $response5 = $batch->say("foo/foo2/baz");
+    is $response5, "foo/foo2/baz", "it returns a single result into a scalar";
+    my ($response6) = $batch->say("foo/foo2/baz");
+    is $response6, "foo/foo2/baz", "it still returns a list in list context";
 
     undef $batch;
     ok !kill(0, $second_pid),

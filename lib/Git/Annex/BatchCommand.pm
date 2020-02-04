@@ -82,9 +82,9 @@ sub new {
 Say a line or lines of input to the batch command's standard input.
 Trailing line breaks in C<$input> are optional.
 
-In list context, returns a list of chomped git-annex's responses to
-the items of input, chomped.  In scalar context, returns the number of
-trueish responses.
+In list context, returns a list of git-annex's responses to the items
+of input, chomped.  In scalar context, returns the last of git-annex's
+responses, chomped.
 
 =cut
 
@@ -97,7 +97,7 @@ sub say {
         chomp(my $out = readline $self->{_out});
         push @output, $out;
     }
-    return wantarray ? @output : scalar @output;
+    return wantarray ? @output : $output[$#output];
 }
 
 =head2 restart
