@@ -22,8 +22,6 @@ with_temp_annexes {
     } catch {
         ok grep(/not enough arguments/, $_), "it requires an annex";
     };
-    #>>>
-    #<<<
     try {
         my $nope = $annex->batch;
     } catch {
