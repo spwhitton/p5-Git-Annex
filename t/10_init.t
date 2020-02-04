@@ -10,7 +10,7 @@ use Git::Annex;
 use File::chdir;
 use File::Temp qw(tempdir);
 use t::Setup;
-use File::Spec::Functions qw(catfile);
+use File::Spec::Functions qw(catfile file_name_is_absolute);
 
 {
     my $temp = tempdir CLEANUP => 1;
@@ -19,6 +19,9 @@ use File::Spec::Functions qw(catfile);
     local $CWD = $temp;
     $annex = Git::Annex->new;
     is $annex->toplevel, $temp, "constructor sets toplevel to pwd";
+    $annex = Git::Annex->new("foo");
+    ok file_name_is_absolute $annex->toplevel,
+      "it converts a relative path to absolute";
 }
 
 {
