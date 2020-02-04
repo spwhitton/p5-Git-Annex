@@ -22,6 +22,7 @@ use File::Spec::Functions qw(catfile file_name_is_absolute);
     $annex = Git::Annex->new("foo");
     ok file_name_is_absolute $annex->toplevel,
       "it converts a relative path to absolute";
+    ok !-d $annex->toplevel, "it permits initialisation in a nonexistent dir";
 }
 
 {
