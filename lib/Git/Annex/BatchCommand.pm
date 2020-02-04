@@ -106,7 +106,7 @@ Synonym for C<say> method.
 
 =cut
 
-*Git::Annex::BatchCommand::ask = \&Git::Annex::BatchCommand::say;
+*ask = \&say;
 
 =head2 restart
 
