@@ -68,6 +68,7 @@ use Storable;
 use Data::Compare;
 use List::Util qw(all);
 use Time::HiRes qw(stat time);
+use Git::Annex::BatchCommand;
 
 use Moo;
 use namespace::clean;
@@ -262,6 +263,22 @@ sub abs_contentlocation {
     try { ($contentlocation) = $self->git->annex("contentlocation", $key) };
     $contentlocation ? rel2abs($contentlocation, $self->toplevel) : undef;
 }
+
+=head2 batch($cmd, @args)
+
+Instantiate a C<Git::Annex::BatchCommand> object by starting up a
+git-annex C<--batch> command.
+
+  my $batch = $annex->batch("find", "--in=here");
+  say "foo/bar annexed content is present in this repo"
+    if $batch->say("foo/bar");
+
+  # kill the batch process:
+  undef $batch;
+
+=cut
+
+sub batch { Git::Annex::BatchCommand->new(@_) }
 
 sub _git_path {
     my ($self, @input) = @_;
