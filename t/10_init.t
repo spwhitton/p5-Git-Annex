@@ -45,4 +45,10 @@ with_temp_annexes {
       "Git::Repository has correct toplevel";
 };
 
+with_temp_annexes {
+    my $source1_dir = catfile shift, "source1";
+    my $annex = Git::Annex->new(catfile $source1_dir, "foo");
+    is $annex->toplevel, $source1_dir, "it rises to top of working tree";
+};
+
 done_testing;

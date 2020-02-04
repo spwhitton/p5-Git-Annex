@@ -288,7 +288,27 @@ sub _git_path {
 
 around BUILDARGS => sub {
     my (undef, undef, @args) = @_;
-    { toplevel => $args[0] ? rel2abs($args[0]) : getcwd };
+
+    my $toplevel = $args[0] ? rel2abs($args[0]) : getcwd;
+
+    # if we're in a working tree, rise up to the root of the working
+    # tree -- for flexibility, don't require that we're actually in a
+    # git repo at all
+    my $pid = fork;
+    die "fork() failed: $!" unless defined $pid;
+    if ($pid) {
+        wait;
+        if ($?) {
+            chomp($toplevel = `git -C $toplevel rev-parse --show-toplevel`);
+            die "git rev-parse --show-toplevel failed" if $?;
+        }
+    } else {
+        close STDERR;
+        chomp(my $output = `git -C $toplevel rev-parse --is-inside-work-tree`);
+        exit ($output and $output eq "true");
+    }
+
+    return { toplevel => $toplevel };
 };
 
 1;
