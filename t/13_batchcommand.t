@@ -53,6 +53,8 @@ with_temp_annexes {
     is $response5, "foo/foo2/baz", "it returns a single result into a scalar";
     my ($response6) = $batch->say("foo/foo2/baz");
     is $response6, "foo/foo2/baz", "it still returns a list in list context";
+    is $batch->ask("foo/foo2/baz"), "foo/foo2/baz",
+      "you can ask as well as say";
 
     undef $batch;
     ok !kill(0, $second_pid),

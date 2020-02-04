@@ -100,6 +100,14 @@ sub say {
     return wantarray ? @output : $output[$#output];
 }
 
+=head2 ask($input, ...)
+
+Synonym for C<say> method.
+
+=cut
+
+*Git::Annex::BatchCommand::ask = \&Git::Annex::BatchCommand::say;
+
 =head2 restart
 
 Kill and restart the C<--batch> command.
