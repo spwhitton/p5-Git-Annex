@@ -69,6 +69,7 @@ use Data::Compare;
 use List::Util qw(all);
 use Time::HiRes qw(stat time);
 use Git::Annex::BatchCommand;
+use IPC::System::Simple qw(capturex);
 
 use Moo;
 use namespace::clean;
@@ -298,14 +299,17 @@ around BUILDARGS => sub {
     die "fork() failed: $!" unless defined $pid;
     if ($pid) {
         wait;
-        if ($?) {
-            chomp($toplevel = `git -C $toplevel rev-parse --show-toplevel`);
-            die "git rev-parse --show-toplevel failed" if $?;
-        }
+        chomp($toplevel = capturex "git",
+            "-C", $toplevel, "rev-parse", "--show-toplevel")
+          if $?;
     } else {
         close STDERR;
-        chomp(my $output = `git -C $toplevel rev-parse --is-inside-work-tree`);
-        exit ($output and $output eq "true");
+        my $output;
+        try {
+            $output = capturex "git", "-C", $toplevel, "rev-parse",
+              "--is-inside-work-tree";
+        };
+        exit($output and $output =~ /true/);
     }
 
     return { toplevel => $toplevel };
