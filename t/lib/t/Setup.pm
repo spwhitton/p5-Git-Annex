@@ -8,7 +8,7 @@ use parent 'Exporter';
 use File::Slurp;
 use File::Temp qw(tempdir);
 use Git::Wrapper;
-use File::Spec::Functions qw(catfile);
+use File::Spec::Functions qw(catfile rel2abs);
 use File::chdir;
 use File::Path qw(rmtree);
 
@@ -19,7 +19,7 @@ sub with_temp_annexes (&) {
     {
         local $CWD = $temp;
         my ($source1, $source2, $dest)
-          = map { Git::Wrapper->new($_) } qw(source1 source2 dest);
+          = map { Git::Wrapper->new(rel2abs $_) } qw(source1 source2 dest);
         mkdir for qw(source1 source2 dest);
         for ($source1, $source2, $dest) {
             $_->init;
