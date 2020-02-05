@@ -33,7 +33,7 @@ sub with_temp_annexes (&) {
         mkdir catfile qw(source1 foo foo2);
         write_file catfile(qw(source1 foo foo2 baz)), "baz\n";
         $source1->RUN(qw(-c annex.gitaddtoannex=false add foo/bar));
-        $source1->RUN(qw(-c annex.gitaddtoannex=false annex add foo/foo2/baz));
+        $source1->RUN(qw(-c annex.addunlocked=true annex add foo/foo2/baz));
         $source1->commit({ message => "add" });
 
         # source2 setup

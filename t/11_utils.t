@@ -16,8 +16,9 @@ use File::chdir;
 use File::Basename qw(basename);
 
 with_temp_annexes {
-    my $temp  = shift;
-    my $annex = Git::Annex->new("source1");
+    my $temp   = shift;
+    my $annex  = Git::Annex->new("source1");
+    my $annex2 = Git::Annex->new("source2");
 
     my $unused_info = catfile($temp, qw(source1 .git annex unused_info));
     is $annex->_git_path("blah", "foo"),
@@ -34,12 +35,12 @@ with_temp_annexes {
     ok !-f $unused_info, "_clear_unused_cache deletes the cache";
 
     {
-        local $CWD = catfile qw(source1 foo foo2);
-        my $contentlocation = realpath rel2abs readlink "baz";
-        my $key             = basename readlink "baz";
-        is $annex->abs_contentlocation($key), $contentlocation,
-          "it returns an absolute path to the content for foo/foo2/baz";
-        is $annex->abs_contentlocation("foo"), undef,
+        local $CWD = "source2";
+        my $contentlocation = realpath rel2abs readlink "other";
+        my $key             = basename readlink "other";
+        is $annex2->abs_contentlocation($key), $contentlocation,
+          "it returns an absolute path to the content for other";
+        is $annex2->abs_contentlocation("foo"), undef,
           "it returns undef for a nonsense key";
     }
 };
