@@ -8,6 +8,8 @@ Git::Annex -- class representing a git-annex repository
 
 annex-review-unused -- interactively process `git annex unused` output
 
+annex-to-annex -- use hardlinks to migrate files between git annex repos
+
 INSTALLATION
 
 To install this module, run the following commands:
