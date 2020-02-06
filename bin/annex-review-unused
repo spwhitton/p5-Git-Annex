@@ -65,6 +65,7 @@ use Getopt::Long;
 use Git::Annex;
 use Try::Tiny;
 use Term::ReadKey;
+use Term::ANSIColor;
 
 my $annex = Git::Annex->new;
 
@@ -200,3 +201,9 @@ if (@to_drop) {
 # after this run.  note that in --just-print mode, @to_drop will be
 # empty, so we'll always exit non-zero if there are any unused files
 exit(@to_drop != @unused_files);
+
+sub say_bold { print colored(['bold'], @_), "\n" }
+
+sub say_bullet { say_bold(" • ", @_) }
+
+sub say_spaced_bullet { say_bold("\n", " • ", @_, "\n") }
