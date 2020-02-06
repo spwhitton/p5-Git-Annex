@@ -8,9 +8,12 @@ use lib 't/lib';
 use Test::More;
 use File::Spec::Functions qw(rel2abs);
 use t::Setup;
+use t::Util;
 use File::chdir;
 use File::Basename qw(dirname);
 use File::Copy qw(copy);
+
+plan skip_all => "device ID issues" if device_id_issues;
 
 # make sure that `make test` will always use the right version of the
 # script we seek to test

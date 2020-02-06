@@ -14,6 +14,8 @@ use Capture::Tiny qw(capture_merged);
 use File::Spec::Functions qw(catfile rel2abs);
 use File::chdir;
 
+plan skip_all => "device ID issues" if device_id_issues;
+
 # make sure that `make test` will always use the right version of the
 # script we seek to test
 #
