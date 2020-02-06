@@ -310,4 +310,8 @@ around BUILDARGS => sub {
     return { toplevel => $toplevel };
 };
 
+=for Pod::Coverage BUILDARGS
+
+=cut
+
 1;
