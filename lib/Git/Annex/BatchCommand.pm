@@ -16,10 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-=head1 NAME
-
-Git::Annex::BatchCommand - Perl interface to git-annex --batch commands
-
 =head1 SYNOPSIS
 
   # you should not instantiate this class yourself; use Git::Annex::batch
@@ -43,6 +39,7 @@ processes to perform queries or request changes.
 =cut
 
 package Git::Annex::BatchCommand;
+# ABSTRACT: Perl interface to git-annex --batch commands
 
 use 5.028;
 use strict;
@@ -52,9 +49,7 @@ use autodie;
 use Carp;
 use IPC::Open2;
 
-=head1 METHODS
-
-=head1 new($annex, $cmd, @args)
+=method new($annex, $cmd, @args)
 
 Initialise a batch process in Git::Annex C<$annex>, running git-annex
 subcommand C<$cmd> (e.g. C<setpresentkey>) with arguments C<@args>.
@@ -77,7 +72,7 @@ sub new {
     return $self;
 }
 
-=head2 say($input, ...)
+=method say($input, ...)
 
 Say a line or lines of input to the batch command's standard input.
 Trailing line breaks in C<$input> are optional.
@@ -100,7 +95,7 @@ sub say {
     return wantarray ? @output : $output[$#output];
 }
 
-=head2 ask($input, ...)
+=method ask($input, ...)
 
 Synonym for C<say> method.
 
@@ -108,7 +103,7 @@ Synonym for C<say> method.
 
 *ask = \&say;
 
-=head2 restart
+=method restart
 
 Kill and restart the C<--batch> command.
 

@@ -16,10 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-=head1 NAME
-
-Git::Annex - Perl interface to git-annex repositories
-
 =head1 SYNOPSIS
 
   my $annex = Git::Annex->new("/home/spwhitton/annex");
@@ -53,6 +49,7 @@ git-annex.
 =cut
 
 package Git::Annex;
+# ABSTRACT: Perl interface to git-annex repositories
 
 use 5.028;
 use strict;
@@ -74,9 +71,7 @@ use IPC::System::Simple qw(capturex);
 use Moo;
 use namespace::clean;
 
-=head1 METHODS
-
-=head2 toplevel
+=attr toplevel
 
 Returns the toplevel of the repository.
 
@@ -84,7 +79,7 @@ Returns the toplevel of the repository.
 
 has toplevel => (is => 'ro');
 
-=head2 git
+=attr git
 
 Returns an instance of L<Git::Wrapper> initialised in the repository.
 
@@ -94,7 +89,7 @@ has git => (
     is      => 'lazy',
     default => sub { Git::Wrapper->new(shift->toplevel) });
 
-=head2 repo
+=attr repo
 
 Returns an instance of L<Git::Repository> initialised in the repository.
 
@@ -107,7 +102,7 @@ has repo => (
     # Git::Repository::new, so we chdir and let call without arguments
     default => sub { local $CWD = shift->toplevel; Git::Repository->new });
 
-=head2 unused(%opts)
+=method unused(%opts)
 
 Runs C<git annex unused> and returns a hashref containing information
 on unused files.
@@ -252,7 +247,7 @@ sub _clear_unused_cache {
     unlink $self->_unused_cache;
 }
 
-=head2 abs_contentlocation($key)
+=method abs_contentlocation($key)
 
 Returns an absolute path to the content for git-annex key C<$key>.
 
@@ -265,7 +260,7 @@ sub abs_contentlocation {
     $contentlocation ? rel2abs($contentlocation, $self->toplevel) : undef;
 }
 
-=head2 batch($cmd, @args)
+=method batch($cmd, @args)
 
 Instantiate a C<Git::Annex::BatchCommand> object by starting up a
 git-annex C<--batch> command.

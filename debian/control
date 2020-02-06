@@ -13,6 +13,7 @@ Build-Depends-Indep:
  libdigest-md5-file-perl,
  libdist-zilla-perl,
  libdist-zilla-plugin-git-perl,
+ libdist-zilla-plugin-podweaver-perl,
  libfile-chdir-perl,
  libfile-chmod-perl,
  libfile-slurp-perl,
