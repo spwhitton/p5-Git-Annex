@@ -199,4 +199,4 @@ if (@to_drop) {
 # exit value represents whether or not there are any unused files left
 # after this run.  note that in --just-print mode, @to_drop will be
 # empty, so we'll always exit non-zero if there are any unused files
-exit @to_drop == @unused_files;
+exit(@to_drop != @unused_files);
