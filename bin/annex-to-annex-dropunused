@@ -19,11 +19,24 @@
 
 =head1 SYNOPSIS
 
-
+B<annex-to-annex-dropunused>
 
 =head1 DESCRIPTION
 
+This program drops files which have been migrated by
+annex-to-annex(1).  You can run it in the source annex(es) to get rid
+of the old unused files which are known to have been migrated.
 
+Only files which have been hardlinked into the destination annex will
+be removed, i.e., no data will be irrevocably removed by this command.
+
+=head1 OPTIONS
+
+None.
+
+=head1 SEE ALSO
+
+annex-to-annex(1)
 
 =cut
 

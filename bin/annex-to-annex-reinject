@@ -19,11 +19,32 @@
 
 =head1 SYNOPSIS
 
-
+B<annex-to-annex-reinject> I<SOURCEANNEX> I<DESTANNEX>
 
 =head1 DESCRIPTION
 
+Wrapper around B<git annex reinject --known>, invoked in I<DESTANNEX>,
+on the files in the git-annex objects dir of the I<SOURCEANNEX>
+(usually I<SOURCEANNEX>/.git/annex/objects).
 
+Suppose that you use annex-to-annex(1) to migrate files from ~/work to
+~/old on your laptop, where each of ~/work and ~/old are git annexes.
+Then on your USB backup drive, you can use this script to move the
+contents of migrated files from your clone of ~/work to your clone of ~/old:
+
+=over 4
+
+    % annex-to-annex-reinject /media/spwhitton/usb/work /media/spwhitton/usb/old
+
+=back
+
+=head1 OPTIONS
+
+None.
+
+=head1 SEE ALSO
+
+annex-to-annex(1), annex-to-annex-dropunused(1)
 
 =cut
 

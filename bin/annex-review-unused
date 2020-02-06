@@ -19,11 +19,41 @@
 
 =head1 SYNOPSIS
 
-
+B<annex-review-unused> [B<--just-print>] [B<--from=>I<REMOTE>] [B<--used-refspec=>I<USEDREFSPEC>]
 
 =head1 DESCRIPTION
 
+This program lets you interactively review unused files in a git annex
+repository, choosing which you'd like to drop.  It provides more
+information about unused files that B<git annex unused>, by running
+git-log(1).
 
+=head1 OPTIONS
+
+=over 4
+
+=item B<--just-print>
+
+Run non-interactively: gather and print information about unused
+files, and then exit.
+
+=item B<--from=>I<REMOTE>
+
+Passed on to B<git annex unused>.
+
+=item B<--used-refspec=>I<USEDREFSPEC>
+
+Passed on to B<git annex unused>.
+
+=back
+
+=head1 EXIT STATUS
+
+0 if there are no unused files left at time of program exit, 1 if there are.
+
+=head1 SEE ALSO
+
+git-annex-unused(1), git-annex-dropunused(1)
 
 =cut
 

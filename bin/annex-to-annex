@@ -19,7 +19,7 @@
 
 =head1 SYNOPSIS
 
-
+B<annex-to-annex> [B<--commit>] I<source> ... I<destination>
 
 =head1 DESCRIPTION
 
@@ -31,6 +31,24 @@ It is useful for splitting and consolidating git annexes.  For
 example, at the end of the semester I use this script to move files
 from my work annex, which gets synced to a lot of places, into an
 archival annex, which doesn't.
+
+Each I<source> should be a file or directory in a git annex.
+I<destination> should be a subdirectory of a git annex.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<--commit>
+
+Commit changes in the source and destination annexes.  Otherwise
+changes are merely added to the index.
+
+=back
+
+=head1 SEE ALSO
+
+git-annex(1)
 
 =cut
 
