@@ -18,7 +18,7 @@ my $a2a    = "annex-to-annex";
 my $a2a_du = "annex-to-annex-dropunused";
 $a2a = rel2abs "blib/script/annex-to-annex" if -x "blib/script/annex-to-annex";
 $a2a_du = rel2abs "blib/script/annex-to-annex-dropunused"
-  if -x "blib/script/annex-to-annex-dropunuesd";
+  if -x "blib/script/annex-to-annex-dropunused";
 
 with_temp_annexes {
     my (undef, undef, $source2) = @_;
