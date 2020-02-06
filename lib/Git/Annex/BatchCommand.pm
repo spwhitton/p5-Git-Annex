@@ -1,5 +1,5 @@
-# Git::Annex
-# Perl interface to git-annex repositories
+package Git::Annex::BatchCommand;
+# ABSTRACT: Perl interface to git-annex --batch commands
 #
 # Copyright (C) 2020  Sean Whitton <spwhitton@spwhitton.name>
 #
@@ -37,9 +37,6 @@ git-annex running rather than repeatedly executing new git-annex
 processes to perform queries or request changes.
 
 =cut
-
-package Git::Annex::BatchCommand;
-# ABSTRACT: Perl interface to git-annex --batch commands
 
 use 5.028;
 use strict;

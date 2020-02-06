@@ -1,5 +1,5 @@
-# Git::Annex
-# Perl interface to git-annex repositories
+package Git::Annex;
+# ABSTRACT: Perl interface to git-annex repositories
 #
 # Copyright (C) 2019-2020  Sean Whitton <spwhitton@spwhitton.name>
 #
@@ -47,9 +47,6 @@ L<https://git-annex.branchable.com/> for more information on
 git-annex.
 
 =cut
-
-package Git::Annex;
-# ABSTRACT: Perl interface to git-annex repositories
 
 use 5.028;
 use strict;

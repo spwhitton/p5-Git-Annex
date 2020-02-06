@@ -6,9 +6,9 @@ use of this interface.  Requires git-annex installed to be useful.
 
 Git::Annex -- class representing a git-annex repository
 
-annex-review-unused -- interactively process `git annex unused` output
-
 annex-to-annex -- use hardlinks to migrate files between git annex repos
+
+annex-review-unused -- interactively process `git annex unused` output
 
 INSTALLATION
 

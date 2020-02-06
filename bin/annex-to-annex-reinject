@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # PODNAME: annex-to-annex-reinject
 # ABSTRACT: use 'git annex reinject' to redo annex-to-annex
-
+#
 # Copyright (C) 2019-2020 Sean Whitton
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,9 @@ B<annex-to-annex-reinject> I<SOURCEANNEX> I<DESTANNEX>
 
 Wrapper around B<git annex reinject --known>, invoked in I<DESTANNEX>,
 on the files in the git-annex objects dir of the I<SOURCEANNEX>
-(usually I<SOURCEANNEX>/.git/annex/objects).
+(usually I<SOURCEANNEX>/.git/annex/objects).  After reinjecting files,
+the git-annex branch of I<SOURCEANNEX> is updated so that it does not
+think the content is present there anymore.
 
 Suppose that you use annex-to-annex(1) to migrate files from ~/work to
 ~/old on your laptop, where each of ~/work and ~/old are git annexes.
@@ -44,7 +46,7 @@ None.
 
 =head1 SEE ALSO
 
-annex-to-annex(1), annex-to-annex-dropunused(1)
+git-annex-reinject(1), annex-to-annex(1), annex-to-annex-dropunused(1)
 
 =cut
 
