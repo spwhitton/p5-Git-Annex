@@ -42,6 +42,9 @@ that command.
 =cut
 
 sub main {
+    shift if $_[0] and ref $_[0] eq ""; # in case main called as a class method
+    local @ARGV = @{ $_[0] } if $_[0] and ref $_[0] ne "";
+
     # only support v7 because supporting v5 too would make things quite
     # complex.  require git-annex >=7.20191009 because it will refuse to
     # work in v5 repos, and because it supports `git annex find --unlocked`

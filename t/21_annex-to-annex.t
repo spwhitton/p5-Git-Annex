@@ -56,7 +56,10 @@ with_temp_annexes {
 with_temp_annexes {
     my (undef, $source1, $source2, $dest) = @_;
 
-    run_bin qw(annex-to-annex --commit source1/foo source2/other dest);
+    # also implicitly test, here, that we can invoke the program by
+    # passing a subroutine reference when invoking main as a class
+    # method
+    App::annex_to_annex->main([qw(--commit source1/foo source2/other dest)]);
 
     @output = $source1->RUN(qw(log -1 --oneline --name-status));
     like $output[0], qr/migrated by annex-to-annex/,
