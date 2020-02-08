@@ -40,42 +40,5 @@ git-annex-dropunused(1), annex-to-annex(1), annex-to-annex-reinject(1)
 
 =cut
 
-use 5.028;
-use strict;
-use warnings;
-
-use autodie;
-use Git::Annex;
-
-# This script used to have a --dest option which specified the
-# destination annex previously used with annex-to-annex.  Then, if the
-# unused file had a hardlink count of 1, but was present in the
-# destination annex, this script would drop it.
-#
-# That was somewhat dangerous functionality because it involves this
-# script running `git annex dropunused --force` for files with a
-# hardlink count of 1.  And further, it is not actually needed,
-# because running annex-to-annex-reinject after
-# annex-to-annex-dropunused handles such files in a way that is safer.
-#
-# It is still good to run this script before annex-to-annex-reinject
-# to make the latter faster.
-
-my $annex = Git::Annex->new;
-
-my @to_drop;
-my @unused_files = grep { !$_->{bad} && !$_->{tmp} } @{ $annex->unused };
-
-foreach my $unused_file (@unused_files) {
-    my $content = $annex->abs_contentlocation($unused_file->{key});
-    my $link_count = (stat $content)[3];
-    my @logs
-      = $annex->git->log({ no_textconv => 1 }, "-S", $unused_file->{key});
-
-    next unless $logs[0] and $logs[0]->message =~ /migrated by annex-to-annex/;
-    next unless $link_count > 1;
-
-    push @to_drop, $unused_file->{number};
-}
-
-$annex->git->annex("dropunused", { force => 1 }, @to_drop);
+use App::annex_to_annex_dropunused;
+exit App::annex_to_annex->main;

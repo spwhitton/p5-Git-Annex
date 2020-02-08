@@ -5,6 +5,8 @@ use strict;
 use warnings;
 use lib 't/lib';
 
+use App::annex_to_annex;
+use App::annex_to_annex_dropunused;
 use Test::More;
 use File::Spec::Functions qw(rel2abs);
 use t::Setup;
@@ -15,22 +17,14 @@ use File::Copy qw(copy);
 
 plan skip_all => "device ID issues" if device_id_issues;
 
-# make sure that `make test` will always use the right version of the
-# script we seek to test
-my $a2a    = "annex-to-annex";
-my $a2a_du = "annex-to-annex-dropunused";
-$a2a = rel2abs "blib/script/annex-to-annex" if -x "blib/script/annex-to-annex";
-$a2a_du = rel2abs "blib/script/annex-to-annex-dropunused"
-  if -x "blib/script/annex-to-annex-dropunused";
-
 with_temp_annexes {
     my (undef, undef, $source2) = @_;
 
-    system $a2a, qw(--commit source1/foo source2/other dest);
+    run_bin qw(annex-to-annex --commit source1/foo source2/other dest);
 
     {
         local $CWD = "source2";
-        system $a2a_du;
+        run_bin "annex-to-annex-dropunused";
         $source2->checkout("master~1");
         ok((lstat "other" and not stat "other"), "other was dropped");
     }
@@ -39,7 +33,7 @@ with_temp_annexes {
 with_temp_annexes {
     my (undef, undef, $source2) = @_;
 
-    system $a2a, qw(--commit source1/foo source2/other dest);
+    run_bin qw(annex-to-annex --commit source1/foo source2/other dest);
 
     {
         local $CWD = "source2";
@@ -55,11 +49,11 @@ with_temp_annexes {
         system "mv", "-f", "$other_content.tmp", $other_content;
         chmod 0555, dirname $other_content;
 
-        system $a2a_du;
+        run_bin "annex-to-annex-dropunused";
         $source2->checkout("master~1");
         ok((lstat "other" and stat "other"), "other was not dropped");
         # $source2->checkout("master");
-        # system $a2a_du, "--dest=../dest";
+        # run_bin qw(annex-to-annex-dropunused --dest=../dest);
         # $source2->checkout("master~1");
         # ok((lstat "other" and not stat "other"), "other was dropped");
     }
@@ -68,7 +62,7 @@ with_temp_annexes {
 # with_temp_annexes {
 #     my (undef, undef, $source2, $dest) = @_;
 
-#     system $a2a, qw(--commit source1/foo source2/other dest);
+#     run_bin qw(annex-to-annex --commit source1/foo source2/other dest);
 
 #     $dest->annex(qw(drop --force other));
 #     {
@@ -85,7 +79,7 @@ with_temp_annexes {
 #         system "mv", "-f", "$other_content.tmp", $other_content;
 #         chmod 0555, dirname $other_content;
 
-#         system $a2a_du, "--dest=../dest";
+#         run_bin qw(annex-to-annex-dropunused --dest=../dest);
 #         $source2->checkout("master~1");
 #         ok((lstat "other" and stat "other"), "other was not dropped");
 #     }
