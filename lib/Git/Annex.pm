@@ -86,18 +86,18 @@ has git => (
     is      => 'lazy',
     default => sub { Git::Wrapper->new(shift->toplevel) });
 
-=attr repo
+# =attr repo
 
-Returns an instance of L<Git::Repository> initialised in the repository.
+# Returns an instance of L<Git::Repository> initialised in the repository.
 
-=cut
+# =cut
 
-has repo => (
-    is => 'lazy',
-    # we don't know (here) whether our repo is bare or not, so we
-    # don't know whether to use the git_dir or work_tree arguments to
-    # Git::Repository::new, so we chdir and let call without arguments
-    default => sub { local $CWD = shift->toplevel; Git::Repository->new });
+# has repo => (
+#     is => 'lazy',
+#     # we don't know (here) whether our repo is bare or not, so we
+#     # don't know whether to use the git_dir or work_tree arguments to
+#     # Git::Repository::new, so we chdir and let call without arguments
+#     default => sub { local $CWD = shift->toplevel; Git::Repository->new });
 
 =method unused(%opts)
 
