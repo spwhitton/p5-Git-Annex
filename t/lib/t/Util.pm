@@ -44,10 +44,10 @@ sub run_bin {
     local @ARGV = @_;
     my ($stdout, $stderr, $exit) = capture {
         my $exit;
-        #<<<
         # in order to simulate calling the program at the command
         # line, convert exceptions into what happens when an ordinary
         # perl script, invoked from the command line, calls 'die'
+        #<<<
         try {
             $exit = $bin->main;
         } catch {
