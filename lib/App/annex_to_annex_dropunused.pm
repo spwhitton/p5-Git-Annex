@@ -47,9 +47,6 @@ documentation for that command.
 =cut
 
 sub main {
-    shift if $_[0] and ref $_[0] eq ""; # in case main called as a class method
-    local @ARGV = @{ $_[0] } if $_[0] and ref $_[0] ne "";
-
     my $annex = Git::Annex->new;
 
     my @to_drop;
