@@ -39,6 +39,10 @@ CORE::exit main unless caller;
 Implementation of annex-to-annex(1).  Please see documentation for
 that command.
 
+Normally takes no arguments and responds to C<@ARGV>.  If you want to
+override that you can pass an arrayref of arguments, and those will be
+used instead of the contents of C<@ARGV>.
+
 =cut
 
 sub main {
