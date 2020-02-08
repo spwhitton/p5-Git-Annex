@@ -8,8 +8,10 @@ use File::Slurp;
 use File::Spec::Functions qw(rel2abs);
 use File::chdir;
 use File::Temp qw(tempdir);
+use Try::Tiny;
+use Capture::Tiny qw(capture);
 
-our @EXPORT = qw( corrupt_annexed_file device_id_issues );
+our @EXPORT = qw( corrupt_annexed_file device_id_issues run_bin );
 
 sub corrupt_annexed_file {
     my ($git, $file) = @_;
@@ -35,6 +37,29 @@ sub device_id_issues {
     my $foo_id = (stat "foo")[0];
     my $bar_id = (stat "bar")[0];
     return($foo_id != $bar_id);
+}
+
+sub run_bin {
+    (my $bin = "App::" . shift) =~ tr/-/_/;
+    local @ARGV = @_;
+    my ($stdout, $stderr, $exit) = capture {
+        my $exit;
+        #<<<
+        # in order to simulate calling the program at the command
+        # line, convert exceptions into what happens when an ordinary
+        # perl script, invoked from the command line, calls 'die'
+        try {
+            $exit = $bin->main;
+        } catch {
+            say STDERR $_;
+            $exit = 255;
+        };
+        #>>>
+        return $exit;
+    };
+    my @stdout = split "\n", $stdout;
+    my @stderr = split "\n", $stderr;
+    return (\@stdout, \@stderr, $exit);
 }
 
 1;
