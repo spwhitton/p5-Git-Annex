@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use lib 't/lib';
 
+use App::annex_to_annex;
 use Test::More;
 use t::Setup;
 use t::Util;
@@ -16,45 +17,37 @@ use File::chdir;
 
 plan skip_all => "device ID issues" if device_id_issues;
 
-# make sure that `make test` will always use the right version of the
-# script we seek to test
-#
-# TODO testing the development version is currently difficult because
-# the 'run' sub in this script seems to reset PATH.  Right now the
-# only sure fire way to run these test against the development version
-# is `dzil test`, which runs everything
-my $a2a = "annex-to-annex";
-$a2a = rel2abs "blib/script/annex-to-annex" if -x "blib/script/annex-to-annex";
-
-my $exit;
-my @output;
+my ($output, $error, $exit, @output);
 
 with_temp_annexes {
     make_path "dest/foo/foo2";
     write_file "dest/foo/bar",      "";
     write_file "dest/foo/foo2/baz", "";
-    ($exit, @output) = run($a2a, "source1/foo", "source2/other", "dest");
+    (undef, $error, $exit)
+      = run_bin qw(annex-to-annex source1/foo source2/other dest);
     ok $exit, "it exits nonzero instead of clobbering an existing file";
-    ok grep(/\/dest\/foo\/bar already exists!$/, @output),
+    ok grep(/\/dest\/foo\/bar already exists!$/, @$error),
       "it won't clobber an existing file";
 };
 
 with_temp_annexes {
     write_file catfile("source1", "quux"), "quux\n";
-    ($exit, @output) = run($a2a, "--commit", "source1/foo/bar", "dest");
+    (undef, $error, $exit)
+      = run_bin qw(annex-to-annex --commit source1/foo/bar dest);
     ok $exit,
       "with --commit, it exits nonzero when uncommitted source changes";
     ok grep(/^git repo containing [^ ]+\/bar is not clean; please commit$/,
-        @output),
+        @$error),
       "with --commit, it exits when uncommitted changes";
 };
 
 with_temp_annexes {
     write_file catfile("dest", "quux"), "quux\n";
-    ($exit, @output) = run($a2a, "--commit", "source1/foo/bar", "dest");
+    (undef, $error, $exit)
+      = run_bin qw(annex-to-annex --commit source1/foo/bar dest);
     ok $exit, "with --commit, it exits nonzero when uncommitted dest changes";
     ok grep(/^git repo containing [^ ]+\/dest is not clean; please commit$/,
-        @output),
+        @$error),
       "with --commit, it exits when uncommitted changes";
 };
 
@@ -63,7 +56,7 @@ with_temp_annexes {
 with_temp_annexes {
     my (undef, $source1, $source2, $dest) = @_;
 
-    system $a2a, qw(--commit source1/foo source2/other dest);
+    run_bin qw(annex-to-annex --commit source1/foo source2/other dest);
 
     @output = $source1->RUN(qw(log -1 --oneline --name-status));
     like $output[0], qr/migrated by annex-to-annex/,
@@ -89,10 +82,10 @@ with_temp_annexes {
     my (undef, $source1) = @_;
 
     corrupt_annexed_file $source1, "foo/foo2/baz";
-    ($exit, @output)
-      = run($a2a, "--commit", "source1/foo", "source2/other", "dest");
+    (undef, $error, $exit)
+      = run_bin qw(annex-to-annex --commit source1/foo source2/other dest);
     ok $exit, "it exits nonzero when dest annex calculates a diff checksum";
-    ok grep(/git-annex calculated a different checksum for/, @output),
+    ok grep(/git-annex calculated a different checksum for/, @$error),
       "it warns when dest annex calculates a diff checksum";
 };
 
@@ -100,18 +93,18 @@ with_temp_annexes {
     my (undef, $source1) = @_;
 
     $source1->annex(qw(drop --force foo/foo2/baz));
-    ($exit, @output)
-      = run($a2a, "--commit", "source1/foo", "source2/other", "dest");
+    ($output, undef, $exit)
+      = run_bin qw(annex-to-annex --commit source1/foo source2/other dest);
     ok $exit, "it exits nonzero when an annexed file is not present";
     ok
-      grep(/^Following annexed files are not present in this repo:$/, @output),
+      grep(/^Following annexed files are not present in this repo:$/, @$output),
       "it exits when annexed files are not present";
 };
 
 # this is the main integration test for the script doing its job
 with_temp_annexes {
     my (undef, $source1, $source2, $dest) = @_;
-    system $a2a, qw(source1/foo source2/other dest);
+    run_bin qw(annex-to-annex source1/foo source2/other dest);
     {
         local $CWD = "source1";
         ok !-e "foo/bar",      "bar should not exist in source1";
@@ -156,10 +149,3 @@ with_temp_annexes {
 };
 
 done_testing;
-
-sub run {
-    my @cmd = @_;
-    my ($exit, @output);
-    @output = split "\n", capture_merged { system @cmd; $exit = $? >> 8 };
-    return ($exit, @output);
-}
