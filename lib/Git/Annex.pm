@@ -301,9 +301,7 @@ has annex => (
     default => sub { bless \$_[0] => "Git::Annex::Wrapper" });
 
 around BUILDARGS => sub {
-    my (undef, undef, @args) = @_;
-
-    my $toplevel = $args[0] ? rel2abs($args[0]) : getcwd;
+    my $toplevel = $_[2] ? rel2abs($_[2]) : getcwd;
 
     # if we're in a working tree, rise up to the root of the working
     # tree -- for flexibility, don't require that we're actually in a
