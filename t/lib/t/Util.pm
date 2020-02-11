@@ -16,7 +16,7 @@ our @EXPORT = qw( corrupt_annexed_file device_id_issues run_bin );
 sub corrupt_annexed_file {
     my ($git, $file) = @_;
 
-    my ($key) = $git->annex("lookupkey", $file);
+    my ($key) = $git->annex("lookupkey",       $file);
     my ($loc) = $git->annex("contentlocation", $key);
     $loc = rel2abs $loc, $git->dir;
 
@@ -36,7 +36,7 @@ sub device_id_issues {
     write_file "bar", "bar\n";
     my $foo_id = (stat "foo")[0];
     my $bar_id = (stat "bar")[0];
-    return($foo_id != $bar_id);
+    return ($foo_id != $bar_id);
 }
 
 sub run_bin {
