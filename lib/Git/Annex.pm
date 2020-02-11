@@ -66,8 +66,41 @@ use Time::HiRes qw(stat time);
 use Git::Annex::BatchCommand;
 use IPC::System::Simple qw(capturex);
 
-use Moo;
-use namespace::clean;
+=method new($dir)
+
+Instantiate an object representing a git-annex located in C<$dir>.
+
+=cut
+
+sub new {
+    my ($class, $toplevel) = @_;
+
+    $toplevel = $toplevel ? rel2abs($toplevel) : getcwd;
+
+    # if we're in a working tree, rise up to the root of the working
+    # tree -- for flexibility, don't require that we're actually in a
+    # git repo at all
+    my $pid = fork;
+    die "fork() failed: $!" unless defined $pid;
+    if ($pid) {
+        wait;
+        chomp($toplevel = capturex "git",
+            "-C", $toplevel, "rev-parse", "--show-toplevel")
+          if $?;
+    } else {
+        close STDERR;
+        my $output;
+        try {
+            $output = capturex "git", "-C", $toplevel, "rev-parse",
+              "--is-inside-work-tree";
+        };
+        exit($output and $output =~ /true/);
+    }
+
+    bless { toplevel => $toplevel } => $class;
+}
+
+=cut
 
 =attr toplevel
 
@@ -75,7 +108,7 @@ The root of the repository.
 
 =cut
 
-has toplevel => (is => 'ro');
+sub toplevel { shift->{toplevel} }
 
 =attr git
 
@@ -83,9 +116,10 @@ An instance of L<Git::Wrapper> initialised in the repository.
 
 =cut
 
-has git => (
-    is      => 'lazy',
-    default => sub { Git::Wrapper->new(shift->toplevel) });
+sub git {
+    my $self = shift;
+    $self->{git} //= Git::Wrapper->new($self->toplevel);
+}
 
 # =attr repo
 
@@ -229,9 +263,10 @@ sub unused {
     return $self->{_unused}{unused};
 }
 
-has _unused_cache => (
-    is      => "lazy",
-    default => sub { shift->_git_path(qw(annex unused_info)) });
+sub _unused_cache {
+    my $self = shift;
+    $self->{_unused_cache} //= $self->_git_path(qw(annex unused_info));
+}
 
 sub _store_unused_cache {
     my $self = shift;
@@ -296,38 +331,9 @@ may be written
 # credits to Git::Wrapper's author for the idea of accessing
 # subcommands in this way; I've just extended that idea to
 # subsubcommands of git
-has annex => (
-    is      => 'lazy',
-    default => sub { bless \$_[0] => "Git::Annex::Wrapper" });
-
-around BUILDARGS => sub {
-    my $toplevel = $_[2] ? rel2abs($_[2]) : getcwd;
-
-    # if we're in a working tree, rise up to the root of the working
-    # tree -- for flexibility, don't require that we're actually in a
-    # git repo at all
-    my $pid = fork;
-    die "fork() failed: $!" unless defined $pid;
-    if ($pid) {
-        wait;
-        chomp($toplevel = capturex "git",
-            "-C", $toplevel, "rev-parse", "--show-toplevel")
-          if $?;
-    } else {
-        close STDERR;
-        my $output;
-        try {
-            $output = capturex "git", "-C", $toplevel, "rev-parse",
-              "--is-inside-work-tree";
-        };
-        exit($output and $output =~ /true/);
-    }
-
-    return { toplevel => $toplevel };
-};
-
-=for Pod::Coverage BUILDARGS
-
-=cut
+sub annex {
+    my $self = shift;
+    $self->{annex} //= bless \$self => "Git::Annex::Wrapper";
+}
 
 1;
