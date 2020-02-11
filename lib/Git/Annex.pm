@@ -70,7 +70,7 @@ use namespace::clean;
 
 =attr toplevel
 
-Returns the toplevel of the repository.
+The root of the repository.
 
 =cut
 
@@ -78,7 +78,7 @@ has toplevel => (is => 'ro');
 
 =attr git
 
-Returns an instance of L<Git::Wrapper> initialised in the repository.
+An instance of L<Git::Wrapper> initialised in the repository.
 
 =cut
 
