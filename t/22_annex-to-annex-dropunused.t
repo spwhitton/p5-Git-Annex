@@ -16,6 +16,7 @@ use File::Basename qw(dirname);
 use File::Copy qw(copy);
 
 plan skip_all => "device ID issues" if device_id_issues;
+plan skip_all => "git-annex not available" unless git_annex_available;
 
 with_temp_annexes {
     my (undef, undef, $source2) = @_;

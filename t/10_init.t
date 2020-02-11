@@ -10,6 +10,7 @@ use Git::Annex;
 use File::chdir;
 use File::Temp qw(tempdir);
 use t::Setup;
+use t::Util;
 use File::Spec::Functions qw(catfile file_name_is_absolute);
 
 {
@@ -45,10 +46,13 @@ use File::Spec::Functions qw(catfile file_name_is_absolute);
 #       "Git::Repository has correct toplevel";
 # };
 
-with_temp_annexes {
-    my $source1_dir = catfile shift, "source1";
-    my $annex = Git::Annex->new(catfile $source1_dir, "foo");
-    is $annex->toplevel, $source1_dir, "it rises to top of working tree";
-};
+SKIP: {
+    skip "git-annex not available", 1 unless git_annex_available;
+    with_temp_annexes {
+        my $source1_dir = catfile shift, "source1";
+        my $annex = Git::Annex->new(catfile $source1_dir, "foo");
+        is $annex->toplevel, $source1_dir, "it rises to top of working tree";
+    };
+}
 
 done_testing;

@@ -13,6 +13,8 @@ use File::chdir;
 use File::Spec::Functions qw(rel2abs);
 use Capture::Tiny qw(capture_stdout);
 
+plan skip_all => "git-annex not available" unless git_annex_available;
+
 with_temp_annexes {
     my (undef, $source1) = @_;
     my ($output, $exit);

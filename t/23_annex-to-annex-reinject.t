@@ -13,6 +13,8 @@ use t::Setup;
 use t::Util;
 use File::chdir;
 
+plan skip_all => "git-annex not available" unless git_annex_available;
+
 with_temp_annexes {
     my (undef, undef, $source2) = @_;
 

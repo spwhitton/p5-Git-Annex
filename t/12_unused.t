@@ -17,6 +17,8 @@ use File::Slurp;
 use File::Spec::Functions qw(catfile);
 use Scalar::Util qw(looks_like_number);
 
+plan skip_all => "git-annex not available" unless git_annex_available;
+
 with_temp_annexes {
     my (undef, $source1) = @_;
     $source1->rm("foo/foo2/baz");

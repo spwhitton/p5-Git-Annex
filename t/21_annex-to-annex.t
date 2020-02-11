@@ -16,6 +16,7 @@ use File::Spec::Functions qw(catfile rel2abs);
 use File::chdir;
 
 plan skip_all => "device ID issues" if device_id_issues;
+plan skip_all => "git-annex not available" unless git_annex_available;
 
 my ($output, $error, $exit, @output);
 

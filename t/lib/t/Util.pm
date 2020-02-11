@@ -12,7 +12,8 @@ use File::Temp qw(tempdir);
 use Try::Tiny;
 use Capture::Tiny qw(capture);
 
-our @EXPORT = qw( corrupt_annexed_file device_id_issues run_bin );
+our @EXPORT
+  = qw( corrupt_annexed_file device_id_issues git_annex_available run_bin );
 
 sub corrupt_annexed_file {
     my ($git, $file) = @_;
@@ -38,6 +39,11 @@ sub device_id_issues {
     my $foo_id = (stat "foo")[0];
     my $bar_id = (stat "bar")[0];
     return ($foo_id != $bar_id);
+}
+
+sub git_annex_available {
+    `which git-annex`;
+    return !$?;
 }
 
 sub run_bin {

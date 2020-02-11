@@ -9,8 +9,11 @@ use Test::More;
 use Git::Annex;
 use Git::Annex::BatchCommand;
 use t::Setup;
+use t::Util;
 use Scalar::Util qw(looks_like_number);
 use Try::Tiny;
+
+plan skip_all => "git-annex not available" unless git_annex_available;
 
 with_temp_annexes {
     my (undef, $source1) = @_;

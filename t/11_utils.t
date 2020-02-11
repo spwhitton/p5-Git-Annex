@@ -10,10 +10,13 @@ use Test::More;
 use Git::Annex;
 use File::Spec::Functions qw(catfile rel2abs);
 use t::Setup;
+use t::Util;
 use Storable;
 use Data::Compare;
 use File::chdir;
 use File::Basename qw(basename);
+
+plan skip_all => "git-annex not available" unless git_annex_available;
 
 with_temp_annexes {
     my $temp   = shift;
