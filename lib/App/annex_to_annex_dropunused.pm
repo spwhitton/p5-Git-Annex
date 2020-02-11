@@ -66,7 +66,7 @@ sub main {
         push @to_drop, $unused_file->{number};
     }
 
-    $annex->git->annex("dropunused", { force => 1 }, @to_drop);
+    $annex->annex->dropunused({ force => 1 }, @to_drop);
 
     return 0;
 }

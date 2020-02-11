@@ -88,7 +88,7 @@ sub main {
         my $annex = Git::Annex->new($dir);
         #<<<
         try {
-            $annex->git->annex("status");
+            $annex->annex->status;
         } catch {
             die "$source does not appear to lie within an annex\n";
         };
@@ -111,7 +111,7 @@ sub main {
 
         my $base = basename $source;
         my @missing
-          = $annex->git->annex("find", "--not", "--in", "here", $base);
+          = $annex->annex->find("--not", "--in", "here", $base);
         if (@missing) {
             say "Following annexed files are not present in this repo:";
             say for @missing;

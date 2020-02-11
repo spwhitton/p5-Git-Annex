@@ -34,9 +34,9 @@ package Git::Annex;
       say "";
   }
 
-  # embedded Git::Wrapper instance; catch exceptions with Try::Tiny
-  say for $annex->git->annex(qw(find --not --in here));
-  $annex->git->annex(qw(copy -t cloud --in here --and --lackingcopies=1));
+  # embedded Git::Wrapper instance with shortcut to access annex subcommands
+  say for $annex->annex->find(qw(--not --in here));
+  $annex->annex->copy(qw(-t cloud --in here --and --lackingcopies=1));
 
 =head1 DESCRIPTION
 
@@ -180,7 +180,7 @@ sub unused {
         $self->{_unused}{unused_args} = \%unused_args;
         # make a copy of %unused_args because Git::Wrapper will remove
         # them from the hash
-        for ($self->git->annex("unused", {%unused_args})) {
+        for ($self->annex->unused({%unused_args})) {
             if (
 /Some corrupted files have been preserved by fsck, just in case/
             ) {
@@ -253,7 +253,7 @@ Returns an absolute path to the content for git-annex key C<$key>.
 sub abs_contentlocation {
     my ($self, $key) = @_;
     my $contentlocation;
-    try { ($contentlocation) = $self->git->annex("contentlocation", $key) };
+    try { ($contentlocation) = $self->annex->contentlocation($key) };
     $contentlocation ? rel2abs($contentlocation, $self->toplevel) : undef;
 }
 
@@ -278,6 +278,36 @@ sub _git_path {
     my ($path) = $self->git->rev_parse({ git_path => 1 }, catfile @input);
     rel2abs $path, $self->toplevel;
 }
+
+package Git::Annex::Wrapper {
+    AUTOLOAD {
+        my $self = shift;
+        (my $subcommand = our $AUTOLOAD) =~ s/.+:://;
+        return if $subcommand eq "DESTROY";
+        $subcommand =~ tr/_/-/;
+        $$self->git->RUN("annex", $subcommand, @_);
+    }
+}
+
+=attr annex
+
+Gives access to git-annex subcommands in the same way that
+Git::Annex::git gives access to git subcommands.  So
+
+    $self->git->annex("contentlocation", $key);
+
+may be written
+
+    $self->annex->contentlocation($key);
+
+=cut
+
+# credits to Git::Wrapper's author for the idea of accessing
+# subcommands in this way; I've just extended that idea to
+# subsubcommands of git
+has annex => (
+    is      => 'lazy',
+    default => sub { bless \$_[0] => "Git::Annex::Wrapper" });
 
 around BUILDARGS => sub {
     my (undef, undef, @args) = @_;

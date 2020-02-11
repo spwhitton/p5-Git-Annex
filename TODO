@@ -1,8 +1,0 @@
-Would be cool to be able to do this, Git::Wrapper style:
-
-    my $annex = Git::Annex->new;
-    $annex->annex->find({ in => "here" });
-
-instead of
-
-    $annex->git->annex("find", { in => "here" });

@@ -127,7 +127,7 @@ sub main {
     # cause setpresentkey changes to be recorded in git-annex branch
     undef $spk;
     sleep 1;
-    $source->git->annex("merge");
+    $source->annex->merge;
 
     return 0;
 }

@@ -88,7 +88,7 @@ sub main {
         if ($from_arg) {
         #<<<
         try {
-            $annex->git->annex("readpresentkey", $unused_file->{key}, $uuid);
+            $annex->annex->readpresentkey($unused_file->{key}, $uuid);
         } catch {
             splice @unused_files, $i, 1;
             next UNUSED;
@@ -174,7 +174,7 @@ sub main {
         _say_spaced_bullet("Will dropunused"
               . (exists $dropunused_args{force} ? " with --force:" : ":"));
         say "@to_drop\n";
-        $annex->git->annex("dropunused", \%dropunused_args, @to_drop)
+        $annex->annex->dropunused(\%dropunused_args, @to_drop)
           if prompt_yn("Go ahead with this?");
     }
 
