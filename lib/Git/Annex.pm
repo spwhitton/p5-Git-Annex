@@ -55,6 +55,7 @@ use warnings;
 use Cwd;
 use File::chdir;
 use Git::Wrapper;
+use Git::Annex::Wrapper;
 use Git::Repository;
 use Try::Tiny;
 use File::Spec::Functions qw(catfile rel2abs);
@@ -277,16 +278,6 @@ sub _git_path {
     my ($self, @input) = @_;
     my ($path) = $self->git->rev_parse({ git_path => 1 }, catfile @input);
     rel2abs $path, $self->toplevel;
-}
-
-package Git::Annex::Wrapper {
-    AUTOLOAD {
-        my $self = shift;
-        (my $subcommand = our $AUTOLOAD) =~ s/.+:://;
-        return if $subcommand eq "DESTROY";
-        $subcommand =~ tr/_/-/;
-        $$self->git->RUN("annex", $subcommand, @_);
-    }
 }
 
 =attr annex
