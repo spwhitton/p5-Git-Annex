@@ -315,6 +315,7 @@ sub _git_path {
 }
 
 package Git::Annex::Wrapper {
+
     AUTOLOAD {
         my $self = shift;
         (my $subcommand = our $AUTOLOAD) =~ s/.+:://;
