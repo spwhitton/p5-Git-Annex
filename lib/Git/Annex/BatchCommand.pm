@@ -24,7 +24,7 @@ package Git::Annex::BatchCommand;
 
   # see git-annex-find(1) -- `git annex find --batch --not --in here`
   # prints an empty string for each file which is not present
-  say "foo/bar is not present in this repo" if $batch->say("foo/bar");
+  say "foo/bar is not present in this repo" unless $batch->ask("foo/bar");
 
 =head1 DESCRIPTION
 
