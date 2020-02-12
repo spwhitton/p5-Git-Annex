@@ -1,5 +1,5 @@
-libgit-annex-perl (0.001-1) UNRELEASED; urgency=medium
+libgit-annex-perl (0.001-1) unstable; urgency=medium
 
   * Initial upload to Debian.
 
- -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 5 Feb 2020 14:52:28 -0700
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 12 Feb 2020 13:03:44 -0700
