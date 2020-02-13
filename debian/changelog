@@ -1,3 +1,9 @@
+libgit-annex-perl (0.001-1~athena1) unstable; urgency=medium
+
+  * Rebuild for athena's apt repository.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 12 Feb 2020 18:44:19 -0700
+
 libgit-annex-perl (0.001-1) unstable; urgency=medium
 
   * Initial upload to Debian.
