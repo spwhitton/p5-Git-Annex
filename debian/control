@@ -6,14 +6,14 @@ Section: perl
 Priority: optional
 Build-Depends:
  debhelper-compat (= 12),
+ dh-dist-zilla,
+ libdist-zilla-plugin-git-perl,
+ libdist-zilla-plugin-podweaver-perl,
 Build-Depends-Indep:
  git-annex <!nocheck>,
  libcapture-tiny-perl,
  libdata-compare-perl,
  libdigest-md5-file-perl,
- libdist-zilla-perl,
- libdist-zilla-plugin-git-perl,
- libdist-zilla-plugin-podweaver-perl,
  libfile-chdir-perl,
  libfile-chmod-perl,
  libfile-slurp-perl,
