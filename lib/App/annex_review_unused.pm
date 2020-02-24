@@ -150,7 +150,6 @@ sub main {
                         system "xdg-open", $contentlocation;
                     } elsif ($response eq "b" and $i > 0) {
                         $i--;
-                        $i--;
                         pop @to_drop
                           if @to_drop
                           and $to_drop[$#to_drop] eq
