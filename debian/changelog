@@ -1,8 +1,9 @@
-libgit-annex-perl (0.001-2) UNRELEASED; urgency=medium
+libgit-annex-perl (0.002-1) UNRELEASED; urgency=medium
 
+  * New upstream release.
   * Use dh-dist-zilla.
 
- -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 17 Feb 2020 12:18:47 -0700
+ -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 24 Feb 2020 07:36:30 -0700
 
 libgit-annex-perl (0.001-1) unstable; urgency=medium
 
