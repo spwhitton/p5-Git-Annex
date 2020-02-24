@@ -2,6 +2,7 @@ Revision history for Git::Annex
 
 {{$NEXT}}
     - Fix logic in an example in Git::Annex::BatchCommand SYNOPSIS.
+    - annex-review-unused: 'b' should go back one entry not two.
 
 0.001     2020-02-12 12:33:47-07:00 America/Phoenix
     - First public release.
