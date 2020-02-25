@@ -1,5 +1,0 @@
-Test-Command: prove --verbose --norc
-Depends: @,
- git-annex,
- libfile-slurp-perl,
- libcapture-tiny-perl
