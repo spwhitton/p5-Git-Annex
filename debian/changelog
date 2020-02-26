@@ -1,3 +1,11 @@
+libgit-annex-perl (0.002-2) UNRELEASED; urgency=medium
+
+  [ gregor herrmann ]
+  * Add debian/tests/pkg-perl/use-name and switch to standard pkg-perl
+    autotests.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 26 Feb 2020 08:35:05 -0700
+
 libgit-annex-perl (0.002-1) unstable; urgency=medium
 
   * New upstream release.
