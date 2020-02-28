@@ -10,7 +10,7 @@ Build-Depends:
  libdist-zilla-plugin-git-perl,
  libdist-zilla-plugin-podweaver-perl,
 Build-Depends-Indep:
- git-annex <!nocheck>,
+ git-annex <!nocheck> (>= 7.20191009),
  libcapture-tiny-perl,
  libdata-compare-perl,
  libdigest-md5-file-perl,
