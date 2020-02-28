@@ -1,4 +1,4 @@
-libgit-annex-perl (0.002-2) UNRELEASED; urgency=medium
+libgit-annex-perl (0.002-2) unstable; urgency=medium
 
   [ gregor herrmann ]
   * Add debian/tests/pkg-perl/use-name and switch to standard pkg-perl
@@ -8,7 +8,7 @@ libgit-annex-perl (0.002-2) UNRELEASED; urgency=medium
   * Tighten git-annex build-dep to require 7.20191009.
     For the sake of attempts to build this package on buster.
 
- -- Sean Whitton <spwhitton@spwhitton.name>  Wed, 26 Feb 2020 08:35:05 -0700
+ -- Sean Whitton <spwhitton@spwhitton.name>  Fri, 28 Feb 2020 16:05:33 -0700
 
 libgit-annex-perl (0.002-1) unstable; urgency=medium
 
