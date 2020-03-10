@@ -130,7 +130,7 @@ sub main {
                     die "$target already exists!\n"
                       if -e $target and !-d $target;
 
-                    my $key = $lk->ask($rel);
+                    my $key = $lk->ask($File::Find::name);
                     if ($key) {    # this is an annexed file
                         my $content = rel2abs $cl->ask($key), $annex->toplevel;
                         my $content_device_id = (stat $content)[0];
@@ -147,7 +147,8 @@ sub main {
                         # to the source, or anything like that
                         system "git", "-C", $dest, "annex", "add",    $rel;
                         system "git", "-C", $dest, "annex", "unlock", $rel
-                          if $find->ask($rel);
+                          if $find->ask(abs2rel $File::Find::name,
+                                        $annex->toplevel);
 
                         # if using the default backend, quick sanity check
                         if ($key =~ /^SHA256E-s[0-9]+--([0-9a-f]+)/) {
