@@ -109,9 +109,9 @@ sub main {
             #>>>
         }
 
-        my $base = basename $source;
         my @missing
-          = $annex->annex->find("--not", "--in", "here", $base);
+          = $annex->annex->find("--not", "--in", "here",
+                                abs2rel $source, $annex->toplevel);
         if (@missing) {
             say "Following annexed files are not present in this repo:";
             say for @missing;
