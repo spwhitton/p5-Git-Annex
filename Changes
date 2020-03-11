@@ -1,6 +1,8 @@
 Revision history for Git::Annex
 
 {{$NEXT}}
+
+0.003     2020-03-11 14:35:04-07:00 America/Phoenix
     - annex-to-annex: Fix path passed to git-annex-find(1) when
       looking for missing files.
     - annex-to-annex: Fix path passed to git-annex-lookupkey(1) when
