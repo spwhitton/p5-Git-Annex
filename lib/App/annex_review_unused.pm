@@ -110,9 +110,9 @@ sub main {
             unless ($just_print) {
                 # truncate log output if necessary to ensure user's
                 # terminal does not scroll
-                my (undef, $height) = GetTerminalSize();
-                splice @log_lines, (($height - 5) - @log_lines)
-                  if @log_lines > ($height - 5);
+                my (undef, $height) = GetTerminalSize;
+                splice @log_lines, $height - (5 + @log_lines)
+                  if 5 + @log_lines > $height;
             }
             print "\n";
             say for @log_lines;
@@ -122,7 +122,7 @@ sub main {
                     # before prompting, clear out stdin, to avoid
                     # registered a keypress more than once
                     ReadMode 4;
-                    1 while defined ReadKey(-1);
+                    1 while defined ReadKey -1;
 
                     my @opts = ('y', 'n');
                     push @opts, 'o' if $contentlocation;
@@ -137,7 +137,7 @@ sub main {
                     ReadMode 0;
 
                     # respond to C-c
-                    exit 0 if ord($response) == 3;
+                    exit 0 if ord $response == 3;
 
                     say $response;
                     $response = lc($response);
