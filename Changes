@@ -1,6 +1,8 @@
 Revision history for Git::Annex
 
 {{$NEXT}}
+    - annex-to-annex-dropunused: Fix attempt to call wrong main()
+      routine.
 
 0.003     2020-03-11 14:35:04-07:00 America/Phoenix
     - annex-to-annex: Fix path passed to git-annex-find(1) when
