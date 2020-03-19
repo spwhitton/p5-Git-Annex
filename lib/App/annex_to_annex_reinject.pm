@@ -29,6 +29,7 @@ use File::Path qw(rmtree);
 use File::Spec::Functions qw(rel2abs);
 use File::Find;
 use Try::Tiny;
+use File::Temp qw(tempdir);
 
 exit main() unless caller;
 
