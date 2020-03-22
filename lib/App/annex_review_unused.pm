@@ -170,10 +170,9 @@ sub main {
     }
 
     if (@to_drop) {
-        _say_spaced_bullet("Will dropunused"
-              . (exists $dropunused_args{force} ? " with --force:" : ":"));
+        _say_spaced_bullet("Will dropunused with --force:");
         say "@to_drop\n";
-        $annex->annex->dropunused(\%dropunused_args, @to_drop)
+        $annex->annex->dropunused(\%dropunused_args, "--force", @to_drop)
           if prompt_yn("Go ahead with this?");
     }
 
