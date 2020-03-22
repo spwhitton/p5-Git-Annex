@@ -192,6 +192,19 @@ sub _say_bullet { _say_bold(" • ", @_) }
 
 sub _say_spaced_bullet { _say_bold("\n", " • ", @_, "\n") }
 
+sub prompt_yn {
+    my $prompt = shift;
+    local $| = 1;
+    my $response;
+    while (1) {
+        print colored(['bold'], "$prompt ");
+        chomp(my $response = <STDIN>);
+        return 1 if lc($response) eq "y";
+        return 0 if lc($response) eq "n";
+        say "invalid response";
+    }
+}
+
 sub exit { $exit_main = shift // 0; goto EXIT_MAIN }
 
 1;

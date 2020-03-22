@@ -1,6 +1,7 @@
 Revision history for Git::Annex
 
 {{$NEXT}}
+    - annex-review-unused: Add missing prompt_yn subroutine.
 
 0.004     2020-03-18 17:08:57-07:00 America/Phoenix
     - annex-to-annex-dropunused: Fix attempt to call wrong main()
