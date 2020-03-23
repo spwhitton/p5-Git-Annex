@@ -170,11 +170,10 @@ sub main {
     }
 
     if (@to_drop) {
-        _say_spaced_bullet("Will dropunused"
-              . (exists $dropunused_args{force} ? " with --force:" : ":"));
+        _say_spaced_bullet("Will dropunused with --force:");
         say "@to_drop\n";
-        $annex->annex->dropunused(\%dropunused_args, @to_drop)
-          if prompt_yn("Go ahead with this?");
+        $annex->annex->dropunused(\%dropunused_args, "--force", @to_drop)
+          if _prompt_yn("Go ahead with this?");
     }
 
     # exit value represents whether or not there are any unused files left
@@ -191,6 +190,19 @@ sub _say_bold { print colored(['bold'], @_), "\n" }
 sub _say_bullet { _say_bold(" • ", @_) }
 
 sub _say_spaced_bullet { _say_bold("\n", " • ", @_, "\n") }
+
+sub _prompt_yn {
+    my $prompt = shift;
+    local $| = 1;
+    my $response;
+    while (1) {
+        print colored(['bold'], "$prompt ");
+        chomp(my $response = <STDIN>);
+        return 1 if lc($response) eq "y";
+        return 0 if lc($response) eq "n";
+        say "invalid response";
+    }
+}
 
 sub exit { $exit_main = shift // 0; goto EXIT_MAIN }
 
