@@ -173,7 +173,7 @@ sub main {
         _say_spaced_bullet("Will dropunused with --force:");
         say "@to_drop\n";
         $annex->annex->dropunused(\%dropunused_args, "--force", @to_drop)
-          if prompt_yn("Go ahead with this?");
+          if _prompt_yn("Go ahead with this?");
     }
 
     # exit value represents whether or not there are any unused files left
@@ -191,7 +191,7 @@ sub _say_bullet { _say_bold(" • ", @_) }
 
 sub _say_spaced_bullet { _say_bold("\n", " • ", @_, "\n") }
 
-sub prompt_yn {
+sub _prompt_yn {
     my $prompt = shift;
     local $| = 1;
     my $response;
