@@ -67,7 +67,28 @@ sub main {
     $unused_opts{used_refspec} = $used_refspec_arg if $used_refspec_arg;
 
     my @to_drop;
-    my @unused_files = @{ $annex->unused(%unused_opts, log => 1) };
+    my @unused_files = grep {
+        # check the unused file still exists i.e. has not been dropped
+        # already (in the case of reviewing unused files at a remote,
+        # just check that it's not been dropped according to the local
+        # git-annex branch by using readpresentkey rather than
+        # checkpresentkey)
+
+        my $ret = $_->{contentlocation}
+          = $annex->abs_contentlocation($_->{key});
+
+        if ($from_arg) {
+            #<<<
+            try {
+                $annex->annex->readpresentkey($_->{key}, $uuid);
+            } catch {
+                $ret = 0;
+            };
+            #>>>
+        }
+
+        $ret;
+    } $annex->unused(%unused_opts, log => 1)->@*;
     exit unless @unused_files;
     if ($just_print) {
         _say_spaced_bullet("There are unused files you can drop with"
@@ -77,27 +98,8 @@ sub main {
     }
     my $i = 0;
   UNUSED: while ($i < @unused_files) {
-        my $unused_file = $unused_files[$i];
-
-        # check the unused file still exists i.e. has not been dropped
-        # already (in the case of reviewing unused files at a remote, just
-        # check that it's not been dropped according to the local
-        # git-annex branch by using readpresentkey rather than
-        # checkpresentkey)
-        my $contentlocation = $annex->abs_contentlocation($unused_file->{key});
-        if ($from_arg) {
-        #<<<
-        try {
-            $annex->annex->readpresentkey($unused_file->{key}, $uuid);
-        } catch {
-            splice @unused_files, $i, 1;
-            next UNUSED;
-        };
-        #>>>
-        } elsif (!$contentlocation) {
-            splice @unused_files, $i, 1;
-            next UNUSED;
-        }
+        my $unused_file     = $unused_files[$i];
+        my $contentlocation = $unused_file->{contentlocation};
 
         system qw(clear -x) unless $just_print;
         _say_bold("unused file #" . $unused_file->{number} . ":");
@@ -122,7 +124,7 @@ sub main {
                     # before prompting, clear out stdin, to avoid
                     # registered a keypress more than once
                     ReadMode 4;
-                    1 while defined ReadKey -1;
+                    1 while defined ReadKey(-1);
 
                     my @opts = ('y', 'n');
                     push @opts, 'o' if $contentlocation;
