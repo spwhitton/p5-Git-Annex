@@ -124,7 +124,7 @@ sub main {
                     # before prompting, clear out stdin, to avoid
                     # registered a keypress more than once
                     ReadMode 4;
-                    1 while defined ReadKey -1;
+                    1 while defined ReadKey(-1);
 
                     my @opts = ('y', 'n');
                     push @opts, 'o' if $contentlocation;
