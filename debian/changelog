@@ -1,3 +1,9 @@
+libgit-annex-perl (0.006-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 23 Mar 2020 17:03:32 -0700
+
 libgit-annex-perl (0.005-1) unstable; urgency=medium
 
   * New upstream release.
