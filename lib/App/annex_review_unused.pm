@@ -67,7 +67,28 @@ sub main {
     $unused_opts{used_refspec} = $used_refspec_arg if $used_refspec_arg;
 
     my @to_drop;
-    my @unused_files = @{ $annex->unused(%unused_opts, log => 1) };
+    my @unused_files = grep {
+        # check the unused file still exists i.e. has not been dropped
+        # already (in the case of reviewing unused files at a remote,
+        # just check that it's not been dropped according to the local
+        # git-annex branch by using readpresentkey rather than
+        # checkpresentkey)
+
+        my $ret = $_->{contentlocation}
+          = $annex->abs_contentlocation($_->{key});
+
+        if ($from_arg) {
+            #<<<
+            try {
+                $annex->annex->readpresentkey($_->{key}, $uuid);
+            } catch {
+                $ret = 0;
+            };
+            #>>>
+        }
+
+        $ret;
+    } $annex->unused(%unused_opts, log => 1)->@*;
     exit unless @unused_files;
     if ($just_print) {
         _say_spaced_bullet("There are unused files you can drop with"
@@ -77,27 +98,8 @@ sub main {
     }
     my $i = 0;
   UNUSED: while ($i < @unused_files) {
-        my $unused_file = $unused_files[$i];
-
-        # check the unused file still exists i.e. has not been dropped
-        # already (in the case of reviewing unused files at a remote, just
-        # check that it's not been dropped according to the local
-        # git-annex branch by using readpresentkey rather than
-        # checkpresentkey)
-        my $contentlocation = $annex->abs_contentlocation($unused_file->{key});
-        if ($from_arg) {
-        #<<<
-        try {
-            $annex->annex->readpresentkey($unused_file->{key}, $uuid);
-        } catch {
-            splice @unused_files, $i, 1;
-            next UNUSED;
-        };
-        #>>>
-        } elsif (!$contentlocation) {
-            splice @unused_files, $i, 1;
-            next UNUSED;
-        }
+        my $unused_file     = $unused_files[$i];
+        my $contentlocation = $unused_file->{contentlocation};
 
         system qw(clear -x) unless $just_print;
         _say_bold("unused file #" . $unused_file->{number} . ":");
@@ -110,9 +112,9 @@ sub main {
             unless ($just_print) {
                 # truncate log output if necessary to ensure user's
                 # terminal does not scroll
-                my (undef, $height) = GetTerminalSize();
-                splice @log_lines, (($height - 5) - @log_lines)
-                  if @log_lines > ($height - 5);
+                my (undef, $height) = GetTerminalSize;
+                splice @log_lines, $height - (5 + @log_lines)
+                  if 5 + @log_lines > $height;
             }
             print "\n";
             say for @log_lines;
@@ -137,7 +139,7 @@ sub main {
                     ReadMode 0;
 
                     # respond to C-c
-                    exit 0 if ord($response) == 3;
+                    exit 0 if ord $response == 3;
 
                     say $response;
                     $response = lc($response);
@@ -170,11 +172,10 @@ sub main {
     }
 
     if (@to_drop) {
-        _say_spaced_bullet("Will dropunused"
-              . (exists $dropunused_args{force} ? " with --force:" : ":"));
+        _say_spaced_bullet("Will dropunused with --force:");
         say "@to_drop\n";
-        $annex->annex->dropunused(\%dropunused_args, @to_drop)
-          if prompt_yn("Go ahead with this?");
+        $annex->annex->dropunused(\%dropunused_args, "--force", @to_drop)
+          if _prompt_yn("Go ahead with this?");
     }
 
     # exit value represents whether or not there are any unused files left
@@ -191,6 +192,19 @@ sub _say_bold { print colored(['bold'], @_), "\n" }
 sub _say_bullet { _say_bold(" • ", @_) }
 
 sub _say_spaced_bullet { _say_bold("\n", " • ", @_, "\n") }
+
+sub _prompt_yn {
+    my $prompt = shift;
+    local $| = 1;
+    my $response;
+    while (1) {
+        print colored(['bold'], "$prompt ");
+        chomp(my $response = <STDIN>);
+        return 1 if lc($response) eq "y";
+        return 0 if lc($response) eq "n";
+        say "invalid response";
+    }
+}
 
 sub exit { $exit_main = shift // 0; goto EXIT_MAIN }
 

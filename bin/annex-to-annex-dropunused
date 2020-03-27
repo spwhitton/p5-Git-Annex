@@ -41,4 +41,4 @@ git-annex-dropunused(1), annex-to-annex(1), annex-to-annex-reinject(1)
 =cut
 
 use App::annex_to_annex_dropunused;
-exit App::annex_to_annex->main;
+exit App::annex_to_annex_dropunused->main;
