@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# PODNAME: annex-review-unused
+# PODNAME: git-annex-reviewunused
 # ABSTRACT: interactively process 'git annex unused' output
 #
 # Copyright (C) 2019-2020  Sean Whitton <spwhitton@spwhitton.name>
@@ -19,7 +19,7 @@
 
 =head1 SYNOPSIS
 
-B<annex-review-unused> [B<--just-print>] [B<--from=>I<REMOTE>] [B<--used-refspec=>I<USEDREFSPEC>]
+B<git annex reviewunused> [B<--just-print>] [B<--from=>I<REMOTE>] [B<--used-refspec=>I<USEDREFSPEC>]
 
 =head1 DESCRIPTION
 
@@ -57,5 +57,5 @@ git-annex-unused(1), git-annex-dropunused(1)
 
 =cut
 
-use App::annex_review_unused;
-exit App::annex_review_unused->main;
+use App::git_annex_reviewunused;
+exit App::git_annex_reviewunused->main;
