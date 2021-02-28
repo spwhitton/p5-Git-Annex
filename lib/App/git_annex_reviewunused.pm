@@ -1,4 +1,4 @@
-package App::annex_review_unused;
+package App::git_annex_reviewunused;
 # ABSTRACT: interactively process 'git annex unused' output
 #
 # Copyright (C) 2019-2020  Sean Whitton <spwhitton@spwhitton.name>
@@ -33,7 +33,7 @@ CORE::exit main unless caller;
 
 =func main
 
-Implementation of annex-review-unused(1).  Please see documentation
+Implementation of git-annex-reviewunused(1).  Please see documentation
 for that command.
 
 Normally takes no arguments and responds to C<@ARGV>.  If you want to

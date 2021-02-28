@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use lib 't/lib';
 
-use App::annex_review_unused;
+use App::git_annex_reviewunused;
 use Test::More;
 use t::Setup;
 use t::Util;
@@ -21,13 +21,13 @@ with_temp_annexes {
 
     {
         local $CWD = "source1";
-        (undef, undef, $exit) = run_bin "annex-review-unused";
+        (undef, undef, $exit) = run_bin "git-annex-reviewunused";
         ok !$exit, "it exits zero when no unused files";
         sleep 1;
         $source1->rm("foo/foo2/baz");
         $source1->commit({ message => "rm" });
 
-        ($output, undef, $exit) = run_bin qw(annex-review-unused --just-print);
+        ($output, undef, $exit) = run_bin qw(git-annex-reviewunused --just-print);
         ok $exit, "it exits nonzero when unused files";
         ok 20 < @$output && @$output < 30, "it prints ~two log entries";
         like $output->[5], qr/unused file #1/, "it prints an expected line";
