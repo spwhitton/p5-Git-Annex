@@ -1,6 +1,8 @@
 Revision history for Git::Annex
 
 {{$NEXT}}
+
+0.008     2022-12-23 22:59:39-07:00 America/Phoenix
     - Test suite: use 'command' shell builtin, rather than which(1), to
       determine whether git-annex is available on PATH.
     - Add a TODO file.
